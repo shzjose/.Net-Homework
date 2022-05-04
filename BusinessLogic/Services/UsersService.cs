@@ -2,6 +2,7 @@
 using BusinessLogic.Interfaces;
 using DTO;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace BusinessLogic.Services
@@ -26,34 +27,47 @@ namespace BusinessLogic.Services
 
         }
 
-        //public List<DTO.Movie> GetUserMovies()
-        //{
-
-        //}
-
-        //public List<DTO.Movie> AddUserMovie(DTO.Movie movie)
-        //{
-
-        //}
-
         public User CreateUser(UserSession user)
         {
+            List<User> users = GetUsers();
+            int x = 0;
 
-            //Valida que no exista
-            
+                foreach (User u in users)
+                {
+                    if (u.Email == user.Email)
+                    {
+                        x++;
+                        break;
+                    }
 
-            var domainUser = new DomainModels.User()
-            {
-                Email = user.Email,
-                Name = user.Name,
-                Password = user.Password
-            };
+                }
+                //VALIDACIÓN
+                if (x == 0)
+                {
 
-            var dbUser = _repositoryManager.Users.Add(domainUser);
-            _repositoryManager.Save();
+                    var domainUser = new DomainModels.User()
+                    {
+                        Email = user.Email,
+                        Name = user.Name,
+                        Password = user.Password
+                    };
 
-            return dbUser.ToDTO();
+                    var dbUser = _repositoryManager.Users.Add(domainUser);
+                    _repositoryManager.Save();
 
+                    return dbUser.ToDTO();
+
+                }
+                else
+                {
+                    return null;
+                }
+
+        }
+
+        public User Login(UserLogin login)
+        {
+            return null;
         }
 
     }
